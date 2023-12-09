@@ -31,6 +31,9 @@ class ControllerAccessTest extends ControllerBaseTest
             'login' => [
                 'statusCodes' => ['GET' => 200],
             ],
+            'app_repoinfo' => [
+                'statusCodes' => ['GET' => 200],
+            ],
         ];
 
     public function testAllRoutesAreProtected(): void
