@@ -4,7 +4,26 @@
 
 {% block body %}
     <h2 class="mt-5">GitMan <span class="bg-logo"></span></h2>
-<pre>{{ output }}</pre>
+    {% for path,repos in repositories %}
+        <h4>{{ path }}</h4>
+        <ul>
+            {% for repo in repos %}
+                <li {{ stimulus_controller('repository', { path: repo.getPathname }) }}>
+                    <span class="badge" {{ stimulus_target('repository', 'statusCommits') }}>&nbsp;</span>
+                    <span class="badge" {{ stimulus_target('repository', 'statusFiles') }}>&nbsp;</span>
+                    <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse-{{ repo.getBasename }}">E
+                    </button>
+                    {{ repo.getBasename }}
+                    <pre {{ stimulus_target('repository', 'debug') }}
+                            class="collapse"
+                            id="collapse-{{ repo.getBasename }}"></pre>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3 class="alert alert-warning">No repositories defined :(</h3>
+    {% endfor %}
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
