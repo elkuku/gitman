@@ -15,10 +15,14 @@ class RepoInfo extends BaseController
         Request    $request,
     ): Response
     {
-        return $this->json(
-            $gitService->repoInfo(
-                $request->get('path')
-            )
-        );
+        $path = $request->get('path');
+
+        if (!$path) {
+            $info = new RepoInfo();
+        } else {
+            $info = $gitService->repoInfo($path);
+        }
+
+        return $this->json($info);
     }
 }
