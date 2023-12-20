@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,7 +10,7 @@ use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/', name: 'app_default', methods: ['GET'])]
-class DefaultController extends BaseController
+class DefaultController extends AbstractController
 {
     public function __invoke(
         #[Autowire('%env(APP_REPOSITORIES)%')] string $appRepositories,

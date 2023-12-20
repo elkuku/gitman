@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Dto\RepoInfo;
+use App\Type\RepoInfoFile;
 use Symfony\Component\Process\Process;
 
 class GitService
@@ -29,7 +30,6 @@ class GitService
             $output = $process->getOutput();
             if ($output) {
                 $lines = explode("\n", $output);
-                dump($lines);
                 $branchInfo = array_shift($lines);
                 if (strpos($branchInfo, '[')) {
                     $info->hasCommitChanges = true;
@@ -37,7 +37,46 @@ class GitService
 
                 $info->hasFileChanges = count($lines) > 1;
 
-                $info->modified = 66;
+                foreach ($lines as $line) {
+                    if (!$line) {
+                        continue;
+                    }
+                    $file = new RepoInfoFile();
+                    $file->path = substr($line, 2);
+
+                    $status = substr($line, 0, 2);
+
+                    switch ($status) {
+                        case 'A ':
+                            $info->added++;
+
+                            $file->status = 'A';
+                            break;
+                        case ' M':
+                            $info->modified++;
+
+                            $file->status = 'M';
+                            break;
+                        case 'D ':
+                            $info->deleted++;
+
+                            $file->status = 'D';
+                            break;
+
+                        case '??':
+                            $info->untracked++;
+
+                            $file->status = '?';
+                            break;
+
+                        default:
+                            $file->status = '-';
+                            break;
+                    }
+
+                    $info->changedFiles[] = $file;
+                }
+
                 $info->debugOutput = $debugOutput;
             }
         } else {
@@ -45,5 +84,22 @@ class GitService
         }
 
         return $info;
+    }
+
+    public function getFileDiff(string $repo, string $file): string
+    {
+        $process = new Process([
+            'git',
+            'diff',
+            $file,
+        ], $repo);
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new \RuntimeException($process->getErrorOutput());
+        }
+
+        return $process->getOutput();
     }
 }

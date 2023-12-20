@@ -13,7 +13,7 @@ command or execute the script content manually.
 ```shell
 symfony console user-admin
 ```
-Create an administer user accounts.
+Create and administer user accounts.
 ```shell
 bin/start
 ```

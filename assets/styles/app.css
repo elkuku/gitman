@@ -10,3 +10,11 @@ main > .container {
     background-size: contain;
     background-repeat: no-repeat;
 }
+
+.link-like {
+    cursor: pointer;
+}
+
+.link-like:hover {
+    background-color: #2b2f32;
+}

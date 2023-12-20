@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
+use App\Dto\RepoInfo;
 use App\Service\GitService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/repoinfo', name: 'app_repoinfo', methods: ['GET'])]
-class RepoInfo extends BaseController
+class RepoInfoController extends AbstractController
 {
     public function __invoke(
         GitService $gitService,

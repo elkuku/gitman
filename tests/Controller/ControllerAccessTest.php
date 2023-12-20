@@ -28,10 +28,10 @@ class ControllerAccessTest extends ControllerBaseTest
             'app_default' => [
                 'statusCodes' => ['GET' => 200],
             ],
-            'login' => [
+            'app_repoinfo' => [
                 'statusCodes' => ['GET' => 200],
             ],
-            'app_repoinfo' => [
+            'app_filediff' => [
                 'statusCodes' => ['GET' => 200],
             ],
         ];

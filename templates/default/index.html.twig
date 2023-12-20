@@ -1,23 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}GitMan!{% endblock %}
 
 {% block body %}
     <h2 class="mt-5">GitMan <span class="bg-logo"></span></h2>
     {% for path,repos in repositories %}
         <h4>{{ path }}</h4>
-        <ul>
+        <ul class="list-group">
             {% for repo in repos %}
-                <li {{ stimulus_controller('repository', { path: repo.getPathname }) }}>
-                    <span class="badge" {{ stimulus_target('repository', 'statusCommits') }}>&nbsp;</span>
-                    <span class="badge" {{ stimulus_target('repository', 'statusFiles') }}>&nbsp;</span>
+                <li class="list-group-item" {{ stimulus_controller('repository', { path: repo.getPathname }) }}>
                     <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapse-{{ repo.getBasename }}">E
+                            data-bs-target="#collapse-{{ repo.getBasename }}">
+                        <i class="bi bi-eye"></i>
                     </button>
+                    <span title="Commits" class="badge" {{ stimulus_target('repository', 'statusCommits') }}>&nbsp;</span>
+                    <span title="Behind" class="text-success" {{ stimulus_target('repository', 'numCommitsBehind') }}>0</span>
+                    <span title="Ahead" class="text-warning" {{ stimulus_target('repository', 'numCommitsAhead') }}>0</span>
+                    <span class="badge" {{ stimulus_target('repository', 'statusFiles') }} title="Files">&nbsp;</span>
+                    <span class="text-success" {{ stimulus_target('repository', 'numFilesAdded') }}>0</span>
+                    <span class="text-warning" {{ stimulus_target('repository', 'numFilesModified') }}>0</span>
+                    <span class="text-danger" {{ stimulus_target('repository', 'numFilesDeleted') }}>0</span>
                     {{ repo.getBasename }}
-                    <pre {{ stimulus_target('repository', 'debug') }}
+                    <div
                             class="collapse"
-                            id="collapse-{{ repo.getBasename }}"></pre>
+                            id="collapse-{{ repo.getBasename }}">
+                        <ul {{ stimulus_target('repository', 'filelist') }} class="list-group"></ul>
+                        <pre {{ stimulus_target('repository', 'debug') }}></pre>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
@@ -27,14 +36,14 @@
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <pre id="filediff"><code class="language-diff"></code></pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
