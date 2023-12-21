@@ -8,6 +8,7 @@ use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonyLevelSetList;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\Symfony\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -31,5 +32,11 @@ return static function (RectorConfig $rectorConfig): void {
 
         SetList::EARLY_RETURN,
         SetList::DEAD_CODE,
+    ]);
+
+    $rectorConfig->skip([
+        ContainerGetNameToTypeInTestsRector::class => [
+            __DIR__ . '/tests/Controller/ControllerAccessTest.php',
+        ],
     ]);
 };
