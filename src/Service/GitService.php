@@ -34,7 +34,7 @@ class GitService
                 if (strpos($info->branchInfo, '[')) {
                     $info->hasCommitChanges = true;
                     if (preg_match('/ahead (\d+)/', $info->branchInfo, $matches)) {
-                        $info->commitsAhead = $matches[1];
+                        $info->commitsAhead = (int)$matches[1];
                     }
                 }
 
