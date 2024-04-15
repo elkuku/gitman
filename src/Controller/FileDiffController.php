@@ -6,7 +6,7 @@ use App\Service\GitService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/filediff', name: 'app_filediff', methods: ['GET'])]
 class FileDiffController extends AbstractController
