@@ -30,9 +30,12 @@ class GitService
             $output = $process->getOutput();
             if ($output) {
                 $lines = explode("\n", $output);
-                $branchInfo = array_shift($lines);
-                if (strpos($branchInfo, '[')) {
+                $info->branchInfo = array_shift($lines);
+                if (strpos($info->branchInfo, '[')) {
                     $info->hasCommitChanges = true;
+                    if (preg_match('/ahead (\d+)/', $info->branchInfo, $matches)) {
+                        $info->commitsAhead = $matches[1];
+                    }
                 }
 
                 $info->hasFileChanges = count($lines) > 1;

@@ -4,8 +4,12 @@ import '../lib/prism.js'
 import '../styles/prism.css'
 
 export default class extends Controller {
-    static targets = ['statusCommits', 'statusFiles', 'filelist', 'filediff', 'debug',
-    'numFilesAdded', 'numFilesModified', 'numFilesDeleted'
+    static targets = [
+        'statusCommits', 'statusFiles',
+        'filelist', 'filediff', 'debug',
+        'numCommitsBehind', 'numCommitsAhead',
+        'numFilesAdded', 'numFilesModified', 'numFilesDeleted', 'numFilesUntracked',
+        'branchInfo'
     ]
     static values = {
         path: String
@@ -26,19 +30,42 @@ export default class extends Controller {
 
         const response = await fetch(`/repoinfo?path=${this.pathValue}`);
         const info = await response.json();
-
+        console.log(info);
         this.info = info
 
-        this.numFilesModifiedTarget.innerHTML = info.modified ? info.modified  : '';
+        this.numCommitsBehindTarget.innerHTML = info.commitsBehind ? info.commitsBehind : '';
+        this.numCommitsAheadTarget.innerHTML = info.commitsAhead ? info.commitsAhead : '';
+
+        this.numFilesAddedTarget.innerHTML = info.added ? info.added : '';
+        this.numFilesModifiedTarget.innerHTML = info.modified ? info.modified : '';
+        this.numFilesDeletedTarget.innerHTML = info.deleted ? info.deleted : '';
+        this.numFilesUntrackedTarget.innerHTML = info.untracked ? info.untracked : '';
+
         this.statusFilesTarget.className = ''
         this.statusFilesTarget.classList.add('badge')
         this.statusFilesTarget.innerHTML = '&nbsp;'
         if (info.isValid) {
+            this.branchInfoTarget.innerHTML = info.branchInfo
             if (info.hasFileChanges) {
                 this.statusFilesTarget.classList.add('bg-warning')
                 for (const file of info.changedFiles) {
                     const li = document.createElement("li");
                     li.className = 'list-group-item';
+                    switch (file.status) {
+                        case 'M':
+                            li.classList.add('text-warning', 'link-like');
+                            li.setAttribute('data-action', 'click->repository#showDiff')
+                            break;
+                        case 'A':
+                            li.classList.add('text-success');
+                            break;
+                        case 'D':
+                            li.classList.add('text-danger');
+                            break;
+                        case '?':
+                            li.classList.add('text-info');
+                            break;
+                    }
                     if ('M' === file.status) {
                         li.classList.add('text-warning', 'link-like');
                         li.setAttribute('data-action', 'click->repository#showDiff')

@@ -13,17 +13,23 @@
                             data-bs-target="#collapse-{{ repo.getBasename }}">
                         <i class="bi bi-eye"></i>
                     </button>
-                    <span title="Commits" class="badge" {{ stimulus_target('repository', 'statusCommits') }}>&nbsp;</span>
-                    <span title="Behind" class="text-success" {{ stimulus_target('repository', 'numCommitsBehind') }}>0</span>
-                    <span title="Ahead" class="text-warning" {{ stimulus_target('repository', 'numCommitsAhead') }}>0</span>
+                    <span title="Commits"
+                          class="badge" {{ stimulus_target('repository', 'statusCommits') }}>&nbsp;</span>
+                    <span title="Behind"
+                          class="text-success" {{ stimulus_target('repository', 'numCommitsBehind') }}>0</span>
+                    <span title="Ahead"
+                          class="text-warning" {{ stimulus_target('repository', 'numCommitsAhead') }}>0</span>
                     <span class="badge" {{ stimulus_target('repository', 'statusFiles') }} title="Files">&nbsp;</span>
                     <span class="text-success" {{ stimulus_target('repository', 'numFilesAdded') }}>0</span>
                     <span class="text-warning" {{ stimulus_target('repository', 'numFilesModified') }}>0</span>
                     <span class="text-danger" {{ stimulus_target('repository', 'numFilesDeleted') }}>0</span>
+                    <span class="text-info" {{ stimulus_target('repository', 'numFilesUntracked') }}>0</span>
                     {{ repo.getBasename }}
                     <div
                             class="collapse"
                             id="collapse-{{ repo.getBasename }}">
+                        <div {{ stimulus_target('repository', 'branchInfo') }}></div>
+
                         <ul {{ stimulus_target('repository', 'filelist') }} class="list-group"></ul>
                         <pre {{ stimulus_target('repository', 'debug') }}></pre>
                     </div>
